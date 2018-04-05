@@ -36,6 +36,20 @@
 
     <script type="text/javascript" src="tweetie.js"></script>
     <script type="text/javascript">
+        $( document ).ready(function() {
+            var urlQuery = window.location.href.split("?query=")[1]
+            $('#userfield')[0].value =decodeURIComponent(urlQuery)
+            if(urlQuery != ""){
+                submitter()
+            }
+            console.log(urlQuery)
+            $('#userfield').change(function(e){
+                var query = e.target.value
+                history.pushState(null,null, window.location.href.split("?")[0]  + "?query="+ query);
+
+            })
+        });
+
         function submitter(e){
             console.log(event)
             event.preventDefault();
@@ -50,6 +64,7 @@
             $('#tablefoo').DataTable();
         });
         }
+
     </script>
      </body>
 </html>
