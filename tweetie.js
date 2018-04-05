@@ -96,8 +96,10 @@
 
         // Fetch tweets
         $.getJSON(settings.apiPath, { username: settings.username, list: settings.list, hashtag: settings.hashtag, count: settings.count, exclude_replies: settings.hideReplies }, function (twt) {
+            var deleteCheckedButton = '<button type="button" onclick="deleteHanlder()"class="btn btn-danger btn-xs">Delete Checked</button>'
+            var toggleButton = '<button type="button" onclick="toggleHandler()"class="btn btn-default btn-xs">Toggle</button>'
             that.find('span').fadeOut('fast', function () {
-                that.append('<thead><tr><th>Name</th><th>date</th><th>tweet</th></tr></thead><tbody></tbody><tfoot><tr><th>Name</th><th>date</th><th>tweets</th></tr></tfoot>');
+                that.append('<thead><tr><th></th><th>date</th><th>tweet</th><th>delete</th></tr></thead><tbody></tbody><tfoot><tr><th></th><th>date</th><th>tweets</th><th>'+deleteCheckedButton+ toggleButton+'</th></tr></tfoot>');
 
                 for (var i = 0; i < settings.count; i++) {
                     var tweet = false;
@@ -118,9 +120,11 @@
                         retweeted: tweet.retweeted,
                         screen_name: linking('@'+ tweet.user.screen_name)
                     };
-
-                    // that.find('tbody').append('<tr><td>' + templating(temp_data) + '</td></tr>');
-                    that.find('tbody').append('<tr><td>' + tweet.user.name + '</td><td>' + dating(tweet.created_at) + '</td><td>' + tweet.text + '</td></tr>');
+                    var link = tweet.text.split('https')[1]
+                    var linkbutton = '<button onclick="linkHandler(\'' + link + '\')" " class="btn btn-primary btn-xs">Full Tweet</button>'
+                    var editButton = '<button type="button" id='+ tweet.id +' onclick="editHandler(\'' + tweet.id + '\')"class="btn btn-warning btn-xs">Edit</button>'
+                    var deleteCheck = '<label><input type="checkbox" value=""></label>'
+                    that.find('tbody').append('<tr><td>' + linkbutton + editButton + '</td><td>' + dating(tweet.created_at) + '</td><td>' + tweet.text.split('https')[0] + '</td><td>' + deleteCheck + '</td></tr>');
                 }
 
                 if (typeof callback === 'function') { callback(); }
@@ -129,3 +133,42 @@
     };
 
 })(jQuery);
+
+function linkHandler(link){
+    window.open("http://twitter.com/"+link) 
+}
+function deleteHanlder(id){
+    var checks = $(':checkbox')
+        for (var i = checks.length - 1; i >= 0; i--) {
+                if(checks[i].checked == true){
+                    console.log(checks[i].parentNode.parentNode.parentNode)
+                    console.log($('#tablefoo').DataTable().row(checks[i].parentNode.parentNode.parentNode).remove().draw())
+                }
+        }  
+}
+
+function editHandler(id){
+
+    text = $('#' + id)[0].parentNode.parentNode.children[2].innerHTML
+    $('#' + id)[0].parentNode.parentNode.children[2].innerHTML = '<textarea style="width:100%" onkeypress="editRow(event)">' + text + '"</textarea>'
+}
+
+function editRow(e){
+    if(e.key == 'Enter'){
+        e.preventDefault()
+        text = e.path[0].innerHTML
+        e.path[0].outerHTML = e.path[0].innerHTML
+    }
+}
+
+function toggleHandler(){
+    var flag = false
+    var checks = $(':checkbox')
+    for (var i = checks.length - 1; i >= 0; i--) {
+        if(checks[i].checked == false){
+            flag = true
+        }
+    }
+    $(":checkbox").prop('checked', flag);  
+
+}
