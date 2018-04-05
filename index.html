@@ -26,6 +26,25 @@
         </div>
 
     </div>
+    <div class="modal" id='myModal' tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Error</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="changeHere"></p>
+          </div>
+<!--           <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
@@ -37,6 +56,13 @@
     <script type="text/javascript" src="tweetie.js"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
+
+            $('#myModal').on('shown.bs.modal', function () {
+                    $('#myInput').trigger('focus')
+                    // console.log($("#changeHere")[0].innerHTML =    )
+                    $("#changeHere")[0].innerHTML = decodeURIComponent(window.location.href.split("?query=")[1])+ "is not a real twitter username"  
+                })           
+
             var urlQuery = window.location.href.split("?query=")[1]
             $('#userfield')[0].value =decodeURIComponent(urlQuery)
             if(urlQuery != ""){
@@ -61,6 +87,11 @@
             template: '<strong class="date">{{date}}</strong> - {{screen_name}} {{tweet}}',
             count: 1000
         }, function () {
+            console.log($("tr").length)
+            if($("tr").length < 3){
+                console.log("dij")
+                $('#myModal').modal('show');
+            }
             $('#tablefoo').DataTable();
         });
         }
