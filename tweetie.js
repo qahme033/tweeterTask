@@ -142,7 +142,7 @@ function deleteHanlder(id){
         for (var i = checks.length - 1; i >= 0; i--) {
                 if(checks[i].checked == true){
                     console.log(checks[i].parentNode.parentNode.parentNode)
-                    console.log($('#tablefoo').DataTable().row(checks[i].parentNode.parentNode.parentNode).remove().draw())
+                    $('#tablefoo').DataTable().row(checks[i].parentNode.parentNode.parentNode).remove().draw()
                 }
         }  
 }
@@ -154,10 +154,13 @@ function editHandler(id){
 }
 
 function editRow(e){
+        console.log(e)
     if(e.key == 'Enter'){
         e.preventDefault()
-        text = e.path[0].innerHTML
-        e.path[0].outerHTML = e.path[0].innerHTML
+        text = e.path[0].value
+        console.log(e.path[2])
+        e.path[0].outerHTML = e.path[0].value
+
     }
 }
 

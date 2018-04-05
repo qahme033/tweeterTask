@@ -64,13 +64,19 @@
                 })           
 
             var urlQuery = window.location.href.split("?query=")[1]
-            $('#userfield')[0].value =decodeURIComponent(urlQuery)
-            if(urlQuery != ""){
+            if(urlQuery != null && urlQuery != ""){
+                $('#userfield')[0].value =decodeURIComponent(urlQuery)
                 submitter()
+
+ 
             }
+            // if(urlQuery != ""){
+            //     submitter()
+            // }
             console.log(urlQuery)
             $('#userfield').change(function(e){
                 var query = e.target.value
+                 // window.location.href =  window.location.href.split("?")[0] + "?query="+ query
                 history.pushState(null,null, window.location.href.split("?")[0]  + "?query="+ query);
 
             })
